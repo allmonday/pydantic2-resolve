@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List
 import pytest
 from pydantic import ConfigDict, BaseModel
-from pydantic_resolve import Resolver, LoaderDepend, mapper
+from pydantic2_resolve import Resolver, LoaderDepend, mapper
 from aiodataloader import DataLoader
 
 @pytest.mark.asyncio
@@ -29,7 +29,7 @@ async def test_mapper():
         Student(id=2, name="jack")
         ]
     results = await Resolver().resolve(students)
-    source = [r.dict() for r in results]
+    source = [r.model_dump() for r in results]
 
     expected = [
         {'id': 1, 'name': 'jack', 'books': '1' },
@@ -62,7 +62,7 @@ async def test_mapper_2():
 
     students = [ Student(id=1, name="jack") ]
     results = await Resolver().resolve(students)
-    source = [r.dict() for r in results]
+    source = [r.model_dump() for r in results]
 
     expected = [
         {'id': 1, 'name': 'jack', 'book': [{'name': 'book-1'}] },
@@ -97,7 +97,7 @@ async def test_mapper_3():
 
     students = [ Student(id=1, name="jack") ]
     results = await Resolver().resolve(students)
-    source = [r.dict() for r in results]
+    source = [r.model_dump() for r in results]
 
     expected = [
         {'id': 1, 'name': 'jack', 'book': {'name': 'book-1'} },
@@ -129,10 +129,10 @@ async def test_mapper_4():
 
     students = [ Student(id=1, name="jack") ]
     results = await Resolver().resolve(students)
-    source = [r.dict() for r in results]
+    source = [r.model_dump() for r in results]
 
     expected = [
-        {'id': 1, 'name': 'jack', 'book': [Book(name='book-1')]},
+        {'id': 1, 'name': 'jack', 'book': [{'name':'book-1'}]},
         ]
     assert source == expected
 
@@ -194,7 +194,7 @@ async def test_mapper_6():
 
     students = [ Student(id=1, name="jack") ]
     result = await Resolver().resolve(students)
-    assert result[0].dict() == {'id':1, 'name':"jack", 'books':[{'name': "book-1", 'published':False}]}
+    assert result[0].model_dump() == {'id':1, 'name':"jack", 'books':[{'name': "book-1", 'published':False}]}
 
 
 @pytest.mark.asyncio
@@ -208,6 +208,7 @@ async def test_mapper_7():
     class Book(BaseModel):
         name: str
         published: bool = False
+
         model_config = ConfigDict(from_attributes=True)
 
     async def batch_load_fn(keys):
@@ -225,4 +226,4 @@ async def test_mapper_7():
 
     students = [ Student(id=1, name="jack") ]
     result = await Resolver().resolve(students)
-    assert result[0].dict() == {'id':1, 'name':"jack", 'books':[{'name': "book-1", 'published':False}]}
+    assert result[0].model_dump() == {'id':1, 'name':"jack", 'books':[{'name': "book-1", 'published':False}]}

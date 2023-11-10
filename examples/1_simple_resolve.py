@@ -1,7 +1,7 @@
 import asyncio
 from typing import List
 from pydantic import BaseModel
-from pydantic_resolve import Resolver
+from pydantic2_resolve import Resolver
 import json
 
 class Friend(BaseModel):

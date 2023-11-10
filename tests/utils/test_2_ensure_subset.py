@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pydantic import BaseModel
-from pydantic_resolve import util
+from pydantic2_resolve import util
 import pytest
 
 def test_ensure_subset():

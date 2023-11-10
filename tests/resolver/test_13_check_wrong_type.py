@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, MissingAnnotationError
+from pydantic2_resolve import Resolver, MissingAnnotationError
 import pytest
 
 class Student(BaseModel):

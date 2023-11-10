@@ -1,6 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, mapper, LoaderDepend
+from pydantic2_resolve import Resolver, mapper, LoaderDepend
 import pytest
 
 # define loader functions

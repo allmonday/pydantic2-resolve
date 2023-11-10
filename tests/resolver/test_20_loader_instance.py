@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, mapper, LoaderDepend
+from pydantic2_resolve import Resolver, mapper, LoaderDepend
 from aiodataloader import DataLoader
 import pytest
 

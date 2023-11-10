@@ -33,7 +33,7 @@ def iter_over_object_resolvers_and_acceptable_fields(target):
     resolvers = [f for f in fields if f.startswith(PREFIX)]
 
     if isinstance(target, BaseModel):
-        attributes = list(target.__fields__.keys())
+        attributes = list(target.model_fields.keys())
     elif is_dataclass(target):
         attributes = [f.name for f in dc_fields(target)]
     else:

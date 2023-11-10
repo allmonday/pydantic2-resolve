@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List
 import pytest
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, LoaderDepend
+from pydantic2_resolve import Resolver, LoaderDepend
 import tests.resolver.test_14_deps.mod_a as a
 import tests.resolver.test_14_deps.mod_b as b
 

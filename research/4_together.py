@@ -3,7 +3,7 @@ import asyncio
 from collections import defaultdict
 from typing import List
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, LoaderDepend
+from pydantic2_resolve import Resolver, LoaderDepend
 from aiodataloader import DataLoader
 
 

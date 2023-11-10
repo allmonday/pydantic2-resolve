@@ -3,7 +3,7 @@ import json
 import asyncio
 from typing import Optional
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, ensure_subset
+from pydantic2_resolve import Resolver, ensure_subset
 from readme_demo.datum import datum, DepartmentBase, TeamBase, MemberBase
 
 

@@ -1,7 +1,7 @@
 import asyncio
 from typing import List, Optional
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, mapper, LoaderDepend
+from pydantic2_resolve import Resolver, mapper, LoaderDepend
 
 # define loader functions
 async def friends_batch_load_fn(names):

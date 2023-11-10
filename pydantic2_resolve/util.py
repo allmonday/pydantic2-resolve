@@ -3,10 +3,10 @@ import types
 import functools
 from collections import defaultdict
 from dataclasses import is_dataclass
-from pydantic import BaseModel, parse_obj_as, ValidationError
+from pydantic import BaseModel, TypeAdapter, ValidationError
 from inspect import iscoroutine, isfunction
 from typing import Any, DefaultDict, Sequence, Type, TypeVar, List, Callable, Optional, Mapping, Union, Iterator, Dict, get_type_hints
-import pydantic_resolve.constant as const
+import pydantic2_resolve.constant as const
 
 
 
@@ -51,8 +51,8 @@ def get_required_fields(kls: BaseModel):
     required_fields = []
 
     # 1. get required fields
-    for fname, field in kls.__fields__.items():
-        if field.required:
+    for fname, field in kls.model_fields.items():
+        if field.is_required:
             required_fields.append(fname)
 
     # 2. get resolve_ and post_ target fields
@@ -136,14 +136,20 @@ def get_mapping_rule(target, source) -> Optional[Callable]:
 
     # pydantic
     if issubclass(target, BaseModel):
-        if target.Config.orm_mode:
+        if target.model_config.get('from_attributes'):
             if isinstance(source, dict):
                 raise AttributeError(f"{type(source)} -> {target.__name__}: pydantic from_orm can't handle dict object")
             else:
-                return lambda t, s: t.from_orm(s)
+                return lambda t, s: t.model_validate(s)
 
-        if isinstance(source, (dict, BaseModel)):
-            return lambda t, s: t.parse_obj(s)
+        if isinstance(source, dict):
+            return lambda t, s: t.model_validate(s)
+
+        if isinstance(source, BaseModel):
+            if source.model_config.get('from_attributes'):
+                return lambda t, s: t.model_validate(s) 
+            else:
+                return lambda t, s: t(**s.model_dump()) 
 
         else:
             raise AttributeError(f"{type(source)} -> {target.__name__}: pydantic can't handle non-dict data")
@@ -177,12 +183,12 @@ def ensure_subset(base):
 
         @functools.wraps(kls)
         def inner():
-            for k, field in kls.__fields__.items():
-                if field.required:
-                    base_field = base.__fields__.get(k)
+            for k, field in kls.model_fields.items():
+                if field.is_required:
+                    base_field = base.model_fields.get(k)
                     if not base_field:
                         raise AttributeError(f'{k} not existed in {base.__name__}.')
-                    if base_field and base_field.type_ != field.type_:
+                    if base_field and base_field.type_ != field.annotation:
                         raise AttributeError(f'type of {k} not consistent with {base.__name__}'  )
             return  kls
         return inner()
@@ -193,13 +199,9 @@ def update_forward_refs(kls: Type[BaseModel]):
     """
     recursively update refs.
     """
-    kls.update_forward_refs()
+    # kls.update_forward_refs()
+    kls.model_rebuild()
     setattr(kls, const.PYDANTIC_FORWARD_REF_UPDATED, True)
-
-    for field in kls.__fields__.values():
-        if issubclass(field.type_, BaseModel):
-            update_forward_refs(field.type_)
-
 
 def update_dataclass_forward_refs(kls):
     if not getattr(kls, const.DATACLASS_FORWARD_REF_UPDATED, False):
@@ -223,11 +225,11 @@ def try_parse_data_to_target_field_type(target, field_name, data):
 
     # 1. get type of target field
     if isinstance(target, BaseModel):
-        _fields = target.__class__.__fields__
-        field_type = _fields[field_name].outer_type_
+        _fields = target.__class__.model_fields
+        field_type = _fields[field_name].annotation
 
         # handle optional logic
-        if data is None and _fields[field_name].required == False:
+        if data is None and _fields[field_name].is_required == False:
             return data
 
     elif is_dataclass(target):
@@ -236,7 +238,8 @@ def try_parse_data_to_target_field_type(target, field_name, data):
     # 2. parse
     if field_type:
         try:
-            result = parse_obj_as(field_type, data)
+            # result = parse_obj_as(field_type, data)
+            result = TypeAdapter(field_type).validate_python(data)
             return result
         except ValidationError as e:
             print(f'Warning: type mismatch, pls check the return type for "{field_name}", expected: {field_type}')

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, asdict, field
 import asyncio
-from pydantic_resolve import Resolver
+from pydantic2_resolve import Resolver
 from typing import List
 import pytest
 

@@ -2,7 +2,7 @@ from dataclasses import asdict, dataclass, field
 from typing import List
 import pytest
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, LoaderDepend
+from pydantic2_resolve import Resolver, LoaderDepend
 
 @pytest.mark.asyncio
 async def test_loader_depends():

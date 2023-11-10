@@ -1,7 +1,7 @@
 import asyncio
 from dataclasses import dataclass
 from typing import List
-from pydantic_resolve import util
+from pydantic2_resolve import util
 from pydantic import ConfigDict, BaseModel
 import pytest
 

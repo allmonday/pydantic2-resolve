@@ -1,7 +1,7 @@
 import pytest
 from typing import List
 from pydantic import BaseModel
-from pydantic_resolve.resolver import Resolver
+from pydantic2_resolve.resolver import Resolver
 
 
 @pytest.mark.asyncio

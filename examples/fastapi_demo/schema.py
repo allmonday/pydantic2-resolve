@@ -1,7 +1,7 @@
 from asyncio import Future
 from pydantic import BaseModel
 from typing import List
-from pydantic_resolve import LoaderDepend
+from pydantic2_resolve import LoaderDepend
 import fastapi_demo.loader as ld
 
 

@@ -1,7 +1,7 @@
 import pytest
 from pydantic import BaseModel
 from typing import Optional
-from pydantic_resolve import Resolver
+from pydantic2_resolve import Resolver
 import asyncio
 import time
 
@@ -69,7 +69,7 @@ async def test_resolve_object():
         "service_detail_3": "detail_3",
         "service_detail_4": "detail_4",
     }
-    assert result.dict() == expected
+    assert result.model_dump() == expected
     delta = time.time() - t
 
     assert delta < 2.1

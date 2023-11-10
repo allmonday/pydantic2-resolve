@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from pydantic_resolve import Resolver
+from pydantic2_resolve import Resolver
 
 class Base(DeclarativeBase):
     pass

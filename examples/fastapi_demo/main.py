@@ -7,7 +7,7 @@ import fastapi_demo.schema as sc
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from pydantic_resolve import Resolver
+from pydantic2_resolve import Resolver
 
 app = FastAPI(debug=True)
 

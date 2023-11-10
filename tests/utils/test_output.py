@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pydantic_resolve.util import output
+from pydantic2_resolve.util import output
 from pydantic import BaseModel
 from typing import List, Optional
 import pytest
