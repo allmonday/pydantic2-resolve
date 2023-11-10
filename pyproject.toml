@@ -5,9 +5,9 @@ description = "create nested data structure easily"
 authors = ["tangkikodo <allmonday@126.com>"]
 readme = "README.md"
 repository = "https://github.com/allmonday/pydantic2_resolve"
-keywords = ["pydantic", "fastapi"]
+keywords = ["pydantic2", "fastapi"]
 license = "MIT"
-packages = [{include = "pydantic_resolve"}]
+packages = [{include = "pydantic2_resolve"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
