@@ -40,7 +40,7 @@ def test_ensure_subset():
     with pytest.raises(AssertionError):
         @util.ensure_subset(Base)
         @dataclass
-        class ChildD():
+        class ChildE():
             a: str
             b: int
             c: int
@@ -48,7 +48,7 @@ def test_ensure_subset():
     with pytest.raises(AssertionError):
         @util.ensure_subset(BaseX)
         @dataclass
-        class ChildD():
+        class ChildF():
             a: str
             b: int
             c: int

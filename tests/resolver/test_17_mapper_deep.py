@@ -109,9 +109,9 @@ async def test_sqlite_and_dataloader():
     async def query():
         async with async_session() as session:
             tasks = (await session.execute(select(Task))).scalars().all()
-            task_objs = [TaskSchema.from_orm(t) for t in tasks]
+            task_objs = [TaskSchema.model_validate(t) for t in tasks]
             resolved_results = await Resolver().resolve(task_objs)
-            to_dict_arr = [r.dict() for r in resolved_results]
+            to_dict_arr = [r.model_dump() for r in resolved_results]
             return to_dict_arr
 
     await init()

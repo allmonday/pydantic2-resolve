@@ -73,7 +73,7 @@ class Root(BaseModel):
 async def test_post_methods():
     root = Root()
     root = await Resolver(context={"world": "new world"}).resolve(root)
-    dct = root.dict()
+    dct = root.model_dump()
     assert dct == {'users': [{'age': 19,
                      'has_cash': True,
                      'friends': [{'has_cash': False,'cash': None, 'name': 'tom'},

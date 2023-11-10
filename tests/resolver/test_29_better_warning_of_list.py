@@ -107,7 +107,7 @@ async def test_error():
     """
     1. generate data from departments to members  (top to bottom)
     """
-    Result.update_forward_refs()
+    Result.model_rebuild()
     department_ids = {2,3}
     _departments = [Department(**d) for d in departments if d['id'] in department_ids] 
     result = Result(departments=_departments)

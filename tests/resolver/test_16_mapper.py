@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 import pytest
 from pydantic import ConfigDict, BaseModel
 from pydantic2_resolve import Resolver, LoaderDepend, mapper
@@ -46,7 +46,7 @@ async def test_mapper_2():
 
     class BookLoader(DataLoader):
         async def batch_load_fn(self, keys):
-            return [[{'name': f'book-{k}'}] for k in keys ]
+            return [[{'name': f'book-{k}'}] for k in keys ]  # return [[obj]]
     
     class Book(BaseModel):
         name: str
@@ -80,7 +80,7 @@ async def test_mapper_3():
             self.name = name
 
     async def batch_load_fn(keys):
-        return [Bo(name=f'book-{k}') for k in keys ]
+        return [Bo(name=f'book-{k}') for k in keys ]  # return [obj]
     
     class Book(BaseModel):
         name: str
@@ -90,7 +90,7 @@ async def test_mapper_3():
         id: int
         name: str
 
-        book: List[Book] = []
+        book: Optional[Book] = None
         @mapper(Book)
         def resolve_book(self, loader=LoaderDepend(batch_load_fn)):
             return loader.load(self.id)
@@ -100,7 +100,7 @@ async def test_mapper_3():
     source = [r.model_dump() for r in results]
 
     expected = [
-        {'id': 1, 'name': 'jack', 'book': {'name': 'book-1'} },
+        {'id': 1, 'name': 'jack', 'book': {'name': 'book-1'}},
         ]
     assert source == expected
 

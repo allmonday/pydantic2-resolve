@@ -69,7 +69,7 @@ async def test_sqlite_and_dataloader():
                 rows = res.scalars().all()
                 dct = defaultdict(list)
                 for row in rows:
-                    dct[row.comment_id].append(FeedbackSchema.from_orm(row))
+                    dct[row.comment_id].append(FeedbackSchema.model_validate(row))
                 return [dct.get(k, []) for k in comment_ids]
 
     class CommentLoader(DataLoader):
@@ -81,7 +81,7 @@ async def test_sqlite_and_dataloader():
 
                 dct = defaultdict(list)
                 for row in rows:
-                    dct[row.task_id].append(CommentSchema.from_orm(row))
+                    dct[row.task_id].append(CommentSchema.model_validate(row))
                 return [dct.get(k, []) for k in task_ids]
 
     class FeedbackSchema(BaseModel):
@@ -116,9 +116,9 @@ async def test_sqlite_and_dataloader():
     async def query():
         async with async_session() as session:
             tasks = (await session.execute(select(Task))).scalars().all()
-            task_objs = [TaskSchema.from_orm(t) for t in tasks]
+            task_objs = [TaskSchema.model_validate(t) for t in tasks]
             resolved_results = await Resolver().resolve(task_objs)
-            to_dict_arr = [r.dict() for r in resolved_results]
+            to_dict_arr = [r.model_dump() for r in resolved_results]
             return to_dict_arr
 
     await init()

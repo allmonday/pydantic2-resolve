@@ -25,4 +25,4 @@ async def test_type_definition():
         'new_books': ['book1', 'book2'],
         'old_books': ['book1', 'book2']
     }
-    assert result.dict() == expected
+    assert result.model_dump() == expected

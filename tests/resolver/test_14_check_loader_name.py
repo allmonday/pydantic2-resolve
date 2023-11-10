@@ -23,7 +23,7 @@ async def test_loader_depends():
 
     students = [Student(id=1, name="jack"), Student(id=2, name="mike")]
     results = await Resolver().resolve(students)
-    source = [r.dict() for r in results]
+    source = [r.model_dump() for r in results]
     expected = [
         {'id': 1, 'name': 'jack', 
          'a_books': [{ 'name': 'book1'}, {'name': 'book2'}],

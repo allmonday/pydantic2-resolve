@@ -39,4 +39,4 @@ async def test_resolve_future():
         'age': 12,
         'future': 'hello'
     }
-    assert result.dict() == expected
+    assert result.model_dump() == expected

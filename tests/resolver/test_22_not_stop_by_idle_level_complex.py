@@ -35,7 +35,7 @@ async def test_loader_depends():
     students = [Student(id=1, name="jack"), Student(id=2, name="mike"), Student(id=3, name="wiki")]
     classroom = ClassRoom(students=students)
     res = await Resolver().resolve(classroom)
-    source = res.dict()
+    source = res.model_dump()
     expected = {
         "students": [
             {'id': 1, 'name': 'jack', 'books': [{ 'name': 'book1'}, {'name': 'book2'}]},

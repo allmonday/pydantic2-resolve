@@ -16,3 +16,4 @@ p = Person(name='kkk', pp=People(name='xxx'))
 
 for v in p.model_fields.values():
     print(v.annotation)
+    print(v.is_required())

@@ -49,4 +49,4 @@ async def test_resolve_object():
         },
         "resolve_age": 21
     }
-    assert result.dict() == expected
+    assert result.model_dump() == expected

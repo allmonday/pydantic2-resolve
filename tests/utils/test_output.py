@@ -22,7 +22,7 @@ def test_output():
         def post_greet(self):
             return 'hi'
     
-    json_schema = A.schema()
+    json_schema = A.model_json_schema()
     assert set(json_schema['required']) == {'id', 'name', 'age', 'greet'}
 
     a = A(id=1)
@@ -61,6 +61,6 @@ def test_output_3():
         def resolve_bs(self):
             return []
     
-    json_schema = A.schema()
+    json_schema = A.model_json_schema()
     assert set(json_schema['required']) == {'id', 'name', 'age', 'bs'}
 

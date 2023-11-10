@@ -24,9 +24,8 @@ def test_parse():
     class A(BaseModel):
         b: Optional[B] = None 
 
-    with pytest.raises(ValidationError):
-        a = A.model_validate({'b': {'age': 21}})
-        assert isinstance(a, A)
+    a = A.model_validate({'b': {'age': 21}})
+    assert isinstance(a, A)
 
 def test_orm():
     class B(BaseModel):
@@ -47,6 +46,5 @@ def test_orm():
     
     aa = AA(b=BB(age=21))
 
-    with pytest.raises(ValidationError):
-        a = A.model_validate(aa)
-        assert isinstance(a, A)
+    a = A.model_validate(aa)
+    assert isinstance(a, A)

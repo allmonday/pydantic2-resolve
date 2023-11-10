@@ -47,7 +47,7 @@ class Foo(BaseModel):
 async def test_case():
     foo = Foo(nums=[1,2,3], a='a', b='b', c=None)
     await Resolver().resolve(foo)
-    assert foo.dict() == {
+    assert foo.model_dump() == {
         'a': 'a',
         'b': 'b',
         'c': None,

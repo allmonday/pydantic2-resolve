@@ -52,7 +52,7 @@ def get_required_fields(kls: BaseModel):
 
     # 1. get required fields
     for fname, field in kls.model_fields.items():
-        if field.is_required:
+        if field.is_required():
             required_fields.append(fname)
 
     # 2. get resolve_ and post_ target fields
@@ -82,7 +82,7 @@ def output(kls):
                 schema['required'] = fnames
             return schema_extra
 
-        kls.Config.schema_extra = staticmethod(build())
+        kls.model_config['json_schema_extra'] = staticmethod(build())
 
     else:
         raise AttributeError(f'target class {kls.__name__} is not BaseModel')
@@ -111,18 +111,20 @@ def mapper(func_or_class: Union[Callable, Type]):
             if retVal is None:
                 return None
 
-            if isinstance(func_or_class, types.FunctionType):
-                # manual mapping
+            if isinstance(func_or_class, types.FunctionType): # ** manual mapping **
                 return func_or_class(retVal)
-            else:
-                # auto mapping
+
+            else: # ** auto mapping **
+                print(retVal)
                 if isinstance(retVal, list):
+                    print('islist')
                     if retVal:
                         rule = get_mapping_rule(func_or_class, retVal[0])
                         return apply_rule(rule, func_or_class, retVal, True)
                     else:
                         return retVal  # return []
                 else:
+                    print('is not ')
                     rule = get_mapping_rule(func_or_class, retVal)
                     return apply_rule(rule, func_or_class, retVal, False)
         return wrap
@@ -184,11 +186,11 @@ def ensure_subset(base):
         @functools.wraps(kls)
         def inner():
             for k, field in kls.model_fields.items():
-                if field.is_required:
+                if field.is_required():
                     base_field = base.model_fields.get(k)
                     if not base_field:
                         raise AttributeError(f'{k} not existed in {base.__name__}.')
-                    if base_field and base_field.type_ != field.annotation:
+                    if base_field and base_field.annotation != field.annotation:
                         raise AttributeError(f'type of {k} not consistent with {base.__name__}'  )
             return  kls
         return inner()
@@ -229,7 +231,7 @@ def try_parse_data_to_target_field_type(target, field_name, data):
         field_type = _fields[field_name].annotation
 
         # handle optional logic
-        if data is None and _fields[field_name].is_required == False:
+        if data is None and _fields[field_name].is_required() == False:
             return data
 
     elif is_dataclass(target):

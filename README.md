@@ -2,14 +2,14 @@
 [![Downloads](https://static.pepy.tech/personalized-badge/pydantic-resolve?period=month&units=abbreviation&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/pydantic-resolve)
 ![Python Versions](https://img.shields.io/pypi/pyversions/pydantic-resolve)
 ![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/6f1661c6310e1b31c9a10b0d09d52d11/raw/covbadge.json)
-[![CI](https://github.com/allmonday/pydantic_resolve/actions/workflows/ci.yml/badge.svg)](https://github.com/allmonday/pydantic_resolve/actions/workflows/ci.yml)
+[![CI](https://github.com/allmonday/pydantic2_resolve/actions/workflows/ci.yml/badge.svg)](https://github.com/allmonday/pydantic2_resolve/actions/workflows/ci.yml)
 
 
 ![img](doc/imgs/resolver.png)
 
-
 [Change Log](./changelog.md)
 
+> this package supports pydantic v2 only, if you want to use with pydantic v1, please use pydantic-resolve instead.
 
 ## Introduction
 
@@ -199,7 +199,7 @@ import json
 import asyncio
 from typing import List
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, LoaderDepend, build_list
+from pydantic2_resolve import Resolver, LoaderDepend, build_list
 
 # 0. prepare table records
 departments = [
@@ -298,7 +298,7 @@ class Result(BaseModel):
 async def main():
     result = Result()
     data = await Resolver().resolve(result)
-    print(json.dumps(data.dict(), indent=4))
+    print(json.dumps(data.model_dump(), indent=4))
 
 asyncio.run(main())
 ```

@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0 (2023.11.10)
+
+- adapt to pydantic v2. 
+
+
+# pydantic-resolve (v1)
+
 ## v.1.7.1 (2023.10.19)
 
 - fix raising error when `__pydantic_resolve_exposed__` field value is None
