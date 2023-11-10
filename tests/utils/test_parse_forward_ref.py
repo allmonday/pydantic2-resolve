@@ -1,7 +1,7 @@
 from __future__ import annotations  # which will cause config error
 from dataclasses import dataclass
 from typing import Optional
-from pydantic import BaseModel, ConfigError
+from pydantic import ConfigDict, BaseModel, ConfigError
 import pytest
 
 def test_dc():
@@ -22,23 +22,21 @@ def test_parse():
         age: int
 
     class A(BaseModel):
-        b: Optional[B] 
+        b: Optional[B] = None 
 
     with pytest.raises(ConfigError):
-        a = A.parse_obj({'b': {'age': 21}})
+        a = A.model_validate({'b': {'age': 21}})
         assert isinstance(a, A)
 
 def test_orm():
     class B(BaseModel):
         age: int
-        class Config:
-            orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
 
 
     class A(BaseModel):
-        b: Optional[B] 
-        class Config:
-            orm_mode = True
+        b: Optional[B] = None 
+        model_config = ConfigDict(from_attributes=True)
     
     class AA:
         def __init__(self, b):

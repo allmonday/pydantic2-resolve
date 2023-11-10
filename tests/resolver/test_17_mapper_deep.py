@@ -3,7 +3,7 @@ from typing import List
 import pytest
 from collections import Counter, defaultdict
 from aiodataloader import DataLoader
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -81,9 +81,7 @@ async def test_sqlite_and_dataloader():
         id: int
         comment_id: int
         content: str
-
-        class Config:
-            orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
 
     class CommentSchema(BaseModel):
         id: int
@@ -93,9 +91,7 @@ async def test_sqlite_and_dataloader():
         @mapper(FeedbackSchema)
         def resolve_feedbacks(self, loader=LoaderDepend(FeedbackLoader)):
             return loader.load(self.id)
-
-        class Config:
-            orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
 
     class TaskSchema(BaseModel):
         id: int
@@ -104,9 +100,7 @@ async def test_sqlite_and_dataloader():
         @mapper(CommentSchema)
         def resolve_comments(self, loader=LoaderDepend(CommentLoader)):
             return loader.load(self.id)
-
-        class Config:
-            orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
 
     async def init():
         async with engine.begin() as conn:

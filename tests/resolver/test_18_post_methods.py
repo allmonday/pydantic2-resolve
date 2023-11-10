@@ -27,7 +27,7 @@ async def cash_batch_load_fn(names):
 
 # define schemas
 class Cash(BaseModel):
-    number: Optional[int]
+    number: Optional[int] = None
 
 class Friend(BaseModel):
     name: str

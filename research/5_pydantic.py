@@ -23,12 +23,12 @@ update_forward_refs(ClassRoom)
 
 print('------------')
 
-print(ClassRoom.__fields__['students'].annotation)
-print(ClassRoom.__fields__['students'].type_)
-print(ClassRoom.__fields__['students'].outer_type_)
+print(ClassRoom.model_fields['students'].annotation)
+print(ClassRoom.model_fields['students'].type_)
+print(ClassRoom.model_fields['students'].outer_type_)
 
 print('------------')
 
-print(Student.__fields__['books'].annotation)
-print(Student.__fields__['books'].type_)
-print(Student.__fields__['books'].outer_type_)
+print(Student.model_fields['books'].annotation)
+print(Student.model_fields['books'].type_)
+print(Student.model_fields['books'].outer_type_)

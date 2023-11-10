@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "pydantic-resolve"
+name = "pydantic2-resolve"
 version = "1.7.1"
 description = "create nested data structure easily"
 authors = ["tangkikodo <allmonday@126.com>"]
 readme = "README.md"
-repository = "https://github.com/allmonday/pydantic_resolve"
+repository = "https://github.com/allmonday/pydantic2_resolve"
 keywords = ["pydantic", "fastapi"]
 license = "MIT"
 packages = [{include = "pydantic_resolve"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-pydantic = "^1.10.4"
+pydantic = "^2.4"
 aiodataloader = "^0.4.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -22,7 +22,7 @@ coverage = "^7.2.1"
 aiosqlite = "^0.18.0"
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.7"}
 pytest-asyncio = "^0.21.0"
-fastapi = "^0.96.0"
+fastapi = "^0.100.0"
 uvicorn = "^0.22.0"
 
 [build-system]

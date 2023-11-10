@@ -1,7 +1,7 @@
 from collections import namedtuple
 from typing import List
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import ConfigDict, BaseModel, ValidationError
 from pydantic_resolve import Resolver, LoaderDepend, mapper
 
 @pytest.mark.asyncio
@@ -119,8 +119,7 @@ async def test_4():
 
     class Book(BaseModel):
         name: str
-        class Config:
-            orm_mode = True
+        model_config = ConfigDict(from_attributes=True)
 
     async def batch_load_fn(keys):
         books = [BOOKS.get(k, []) for k in keys]

@@ -3,7 +3,7 @@ import pytest
 from typing import List
 from collections import Counter, defaultdict
 from aiodataloader import DataLoader
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -115,9 +115,7 @@ class FeedbackSchema(BaseModel):
     id: int
     comment_id: int
     content: str
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class CommentSchema(BaseModel):
     id: int
@@ -127,9 +125,7 @@ class CommentSchema(BaseModel):
 
     def resolve_feedbacks(self, loader=LoaderDepend(FeedbackLoader)):
         return loader.load(self.id)
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class TaskSchema(BaseModel):
     id: int
@@ -138,9 +134,7 @@ class TaskSchema(BaseModel):
     
     def resolve_comments(self, loader=LoaderDepend(CommentLoader)):
         return loader.load(self.id)
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 async def init():
     async with engine.begin() as conn:

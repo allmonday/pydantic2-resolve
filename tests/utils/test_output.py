@@ -8,7 +8,7 @@ def test_output():
     @output
     class A(BaseModel):
         id: int
-        opt: Optional[str]
+        opt: Optional[str] = None
 
         name: str = ''
         def resolve_name(self):

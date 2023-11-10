@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic_resolve import ResolverTargetAttrNotFound, Resolver
-from pydantic import BaseModel, ValidationError
+from pydantic import ConfigDict, BaseModel, ValidationError
 import pytest
 
 class Service(BaseModel):
@@ -40,9 +40,7 @@ class Service3(BaseModel):
     service_detail: int = 0
     def resolve_service_detail(self) -> int: 
         return 'abc'  # type:ignore
-
-    class Config:
-        validate_assignment = True  # <<< required.
+    model_config = ConfigDict(validate_assignment=True)
 
 @pytest.mark.asyncio
 async def test_pydantic_validate_exception():

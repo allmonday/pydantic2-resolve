@@ -35,7 +35,7 @@ class Foo(BaseModel):
 
     a: str
     b: str
-    c: Optional[str]
+    c: Optional[str] = None
     nums:List[int]
     bars: List[Bar] = []
 

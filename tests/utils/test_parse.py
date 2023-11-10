@@ -1,12 +1,12 @@
 from pydantic_resolve import util
 from typing import Optional
-from pydantic import BaseModel, ValidationError
+from pydantic import ConfigDict, BaseModel, ValidationError
 import pytest
 from dataclasses import dataclass
 
 def test_pydantic():
     class A(BaseModel):
-        name: Optional[str]
+        name: Optional[str] = None
     
     a = A(name=None)
     value = util.try_parse_data_to_target_field_type(a, 'name', '123')
@@ -59,8 +59,7 @@ def test_mix():
 def test_orm():
     class B(BaseModel):
         age: int
-        class Config:
-            orm_mode=True
+        model_config = ConfigDict(from_attributes=True)
 
     @dataclass
     class A:

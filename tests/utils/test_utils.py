@@ -2,7 +2,7 @@ import asyncio
 from dataclasses import dataclass
 from typing import List
 from pydantic_resolve import util
-from pydantic import BaseModel
+from pydantic import ConfigDict, BaseModel
 import pytest
 
 def test_get_class_field_annotations():
@@ -133,8 +133,7 @@ def test_auto_mapper_1():
 def test_auto_mapper_2():
     class A(BaseModel):
         a: int
-        class Config:
-            orm_mode=True
+        model_config = ConfigDict(from_attributes=True)
     
     class AA:
         def __init__(self, a):
@@ -152,8 +151,7 @@ def test_auto_mapper_2():
 def test_auto_mapper_3():
     class A(BaseModel):
         a: int
-        class Config:
-            orm_mode=True
+        model_config = ConfigDict(from_attributes=True)
     
     p1 = (A, A(a=1))
     rule = util.get_mapping_rule(*p1)  # type: ignore

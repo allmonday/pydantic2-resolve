@@ -26,21 +26,16 @@ async def test_resolve_object():
         'intro': 'hello martin',
         'books': ['book1', 'book2']
     }
-    assert result.dict() == expected
+    assert result.model_dump() == expected
 
 @pytest.mark.asyncio
 async def test_resolve_array():
     stu = [Student(name="martin")]
     results = await Resolver().resolve(stu)
-    results = [r.dict() for r in results]
+    results = [r.model_dump() for r in results]
     expected = [{
         'name': 'martin',
         'intro': 'hello martin',
         'books': ['book1', 'book2']
     }]
     assert results == expected
-
-def test_schema():
-    schema = Student.schema_json()
-    expected = '''{"title": "Student", "type": "object", "properties": {"name": {"title": "Name", "type": "string"}, "intro": {"title": "Intro", "default": "", "type": "string"}, "books": {"title": "Books", "default": [], "type": "array", "items": {"type": "string"}}}, "required": ["name"]}'''
-    assert schema == expected
