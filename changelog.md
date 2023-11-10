@@ -1,9 +1,10 @@
 # Changelog
 
+# pydantic2-resolve
+
 ## v1.0.0 (2023.11.10)
 
-- adapt to pydantic v2. 
-
+- adapt to pydantic v2.
 
 # pydantic-resolve (v1)
 

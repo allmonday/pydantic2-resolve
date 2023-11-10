@@ -1,24 +1,25 @@
-[![pypi](https://img.shields.io/pypi/v/pydantic-resolve.svg)](https://pypi.python.org/pypi/pydantic-resolve)
-[![Downloads](https://static.pepy.tech/personalized-badge/pydantic-resolve?period=month&units=abbreviation&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/pydantic-resolve)
-![Python Versions](https://img.shields.io/pypi/pyversions/pydantic-resolve)
-![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/6f1661c6310e1b31c9a10b0d09d52d11/raw/covbadge.json)
+[![pypi](https://img.shields.io/pypi/v/pydantic2-resolve.svg)](https://pypi.python.org/pypi/pydantic2-resolve)
+[![Downloads](https://static.pepy.tech/personalized-badge/pydantic2-resolve?period=month&units=abbreviation&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/pydantic2-resolve)
+![Python Versions](https://img.shields.io/pypi/pyversions/pydantic2-resolve)
 [![CI](https://github.com/allmonday/pydantic2_resolve/actions/workflows/ci.yml/badge.svg)](https://github.com/allmonday/pydantic2_resolve/actions/workflows/ci.yml)
 
+<!-- ![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/6f1661c6310e1b31c9a10b0d09d52d11/raw/covbadge.json) -->
 
-![img](doc/imgs/resolver.png)
+![img](doc/resolver.png)
 
 [Change Log](./changelog.md)
 
-> this package supports pydantic v2 only, if you want to use with pydantic v1, please use pydantic-resolve instead.
+> NOTICE: this package supports pydantic v2 only, if you want to use with pydantic v1, please use pydantic-resolve instead.
 
 ## Introduction
 
 Building related data has always been a troublesome thing, whether through ORM or manually constructing it, especially when you need to build data that combines data from multiple kind of sources.
 
 for example, if I want to provide a blog list with recent 10 comment, 5 edit histories and author info, however:
+
 - blogs and comments are stored in the DB
 - edit histories are stored as files
-- author details are provided by some 3rd party user service module.  
+- author details are provided by some 3rd party user service module.
 
 > this is merely hypothetical
 
@@ -29,7 +30,7 @@ title: data from different sources
 
 erDiagram
     Blog ||--o{ Comment : has
-    Blog ||--o{ EditHistory : has 
+    Blog ||--o{ EditHistory : has
     Blog ||--|| Author : belongs_to
 
     Blog {
@@ -60,7 +61,7 @@ erDiagram
     }
 ```
 
-`pydantic-resolve` provides a unified approach to stitching together various data sources, all you need is to define `DataLoader` for each data source. 
+`pydantic-resolve` provides a unified approach to stitching together various data sources, all you need is to define `DataLoader` for each data source.
 
 ```python
 class Blog(BaseModel):
@@ -69,17 +70,17 @@ class Blog(BaseModel):
     author_id: str
 
     # 1 : 1
-    author: Optional[Author] = None  
+    author: Optional[Author] = None
     def resolve_author(self, user_loader: LoaderDepend(UserDataLoader)):
         return user_loader.load(self.author_id)  # service: api handler
 
     # 1 : n
-    comments: List[Comment] = []  
+    comments: List[Comment] = []
     def resolve_comments(self, comment_loader: LoaderDepend(CommentDataLoader)):
         return comment_loader.load(self.id)  # service: db handler
 
     # 1 : n
-    edit_histories: List[EditHistory] = []  
+    edit_histories: List[EditHistory] = []
     def resolve_edit_histories(self, history_loader: LoaderDepend(EditHistoryDataLoader)):
         return history_loader.load(self.id)  # service: file handler
 ```
@@ -89,7 +90,7 @@ In addition, it can help you do some extra calculations after resolving the data
 ```python
 class Blog(BaseModel):
     ...
-    
+
     comments_count: int = 0
     def post_comments_count(self):
         return len(self.comments)
@@ -97,14 +98,12 @@ class Blog(BaseModel):
 
 After schema is done, you only need to query for the base data (blogs), after which `pydantic-resolve` will load all the related data for you.
 
-
 ```python
 blogs = await query_blogs()
 blogs = [Blog(**blog) for blog in blogs]
 blogs = await Resolver().resolve(blogs)
 return blogs
 ```
-
 
 ## Install
 
@@ -114,12 +113,12 @@ pip install pydantic-resolve
 
 ## Demo
 
-Assume we have 3 tables: `departments`, `teams` and `members`, which have `1:N relationship` from left to right. 
+Assume we have 3 tables: `departments`, `teams` and `members`, which have `1:N relationship` from left to right.
 
 ```mermaid
 erDiagram
     Department ||--o{ Team : has
-    Team ||--o{ Member : has 
+    Team ||--o{ Member : has
 
     Department {
       int id
@@ -159,8 +158,7 @@ members = [
 ]
 ```
 
-and we want to generate nested json base on these 3 tables. the output should be looks like: 
-
+and we want to generate nested json base on these 3 tables. the output should be looks like:
 
 ```json
 {
@@ -185,14 +183,11 @@ and we want to generate nested json base on these 3 tables. the output should be
 }
 ```
 
-
 We will shows how to make it with `pydantic-resolve` which has 4 steps:
 
 1. define dataloader
-2. define pydantic schema, use dataloaders  (no N+1 query)
+2. define pydantic schema, use dataloaders (no N+1 query)
 3. resolve
-
-
 
 ```python
 import json
@@ -211,10 +206,10 @@ departments = [
 teams = [
     dict(id=1, department_id=1, name="K8S"),
     dict(id=2, department_id=1, name="MONITORING"),
-    dict(id=3, department_id=1, name="Jenkins"), 
+    dict(id=3, department_id=1, name="Jenkins"),
     dict(id=5, department_id=2, name="Frontend"),
     dict(id=6, department_id=2, name="Bff"),
-    dict(id=7, department_id=2, name="Backend"), 
+    dict(id=7, department_id=2, name="Backend"),
     dict(id=8, department_id=3, name="CAT"),
     dict(id=9, department_id=3, name="Account"),
     dict(id=10, department_id=3, name="Operation"),
@@ -273,7 +268,7 @@ class Team(BaseModel):
     members: List[Member] = []
     def resolve_members(self, loader=LoaderDepend(members_batch_load_fn)):
         return loader.load(self.id)
-    
+
     member_count: int = 0
     def post_member_count(self):
         return len(self.members)
@@ -355,14 +350,15 @@ then we got the output (display the first item for demostration)
           ]
         }
       ]
-    },
+    }
   ]
 }
 ```
 
 ## More cases:
 
-for more cases like: 
+for more cases like:
+
 - how to filter members
 - how to make post calculation after resolved?
 - and so on..
@@ -381,7 +377,6 @@ python -m readme_demo.5_subset
 python -m readme_demo.6_mapper
 python -m readme_demo.7_single
 ```
-
 
 ## API
 
@@ -450,7 +445,6 @@ python -m readme_demo.7_single
 
   reference: [test_16_mapper.py](tests/resolver/test_16_mapper.py)
 
-
 ### ensure_subset(base_class)
 
 - base_class: `class`
@@ -458,7 +452,6 @@ python -m readme_demo.7_single
   it will raise exception if fields of decorated class has field not existed in `base_class`.
 
   reference: [test_2_ensure_subset.py](tests/utils/test_2_ensure_subset.py)
-
 
 ## Run FastAPI example
 
@@ -468,7 +461,6 @@ cd examples
 uvicorn fastapi_demo.main:app
 # http://localhost:8000/docs#/default/get_tasks_tasks_get
 ```
-
 
 ## Unittest
 
