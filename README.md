@@ -2,8 +2,7 @@
 [![Downloads](https://static.pepy.tech/personalized-badge/pydantic2-resolve?period=month&units=abbreviation&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/pydantic2-resolve)
 ![Python Versions](https://img.shields.io/pypi/pyversions/pydantic2-resolve)
 [![CI](https://github.com/allmonday/pydantic2_resolve/actions/workflows/ci.yml/badge.svg)](https://github.com/allmonday/pydantic2_resolve/actions/workflows/ci.yml)
-
-<!-- ![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/6f1661c6310e1b31c9a10b0d09d52d11/raw/covbadge.json) -->
+![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/372580ad111c92340dac39987c0c4e9a/raw/pydantic2-resolve.json)
 
 ![img](doc/resolver.png)
 

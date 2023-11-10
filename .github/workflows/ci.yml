@@ -53,10 +53,10 @@ jobs:
           echo "### Total coverage: ${TOTAL}%" >> $GITHUB_STEP_SUMMARY
 
       - name: "Make badge"
-        uses: schneegans/dynamic-badges-action@v1.6.0
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          auth: ${{ secrets.GIST_TOKEN }}
-          gistID: 6f1661c6310e1b31c9a10b0d09d52d11   # replace with your real Gist id.
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 372580ad111c92340dac39987c0c4e9a # replace with your real Gist id.
           filename: covbadge.json
           label: Coverage
           message: ${{ env.total }}%
