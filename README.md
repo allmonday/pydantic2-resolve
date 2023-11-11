@@ -458,7 +458,7 @@ python -m readme_demo.7_single
 poetry shell
 cd examples
 uvicorn fastapi_demo.main:app
-# http://localhost:8000/docs#/default/get_tasks_tasks_get
+visit http://localhost:8000/docs#/default/get_tasks_tasks_get
 ```
 
 ## Unittest

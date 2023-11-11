@@ -2,6 +2,12 @@
 
 # pydantic2-resolve
 
+## v1.0.1 (2023.11.11)
+
+- optimize TypyAdapter based on pydantic's suggestion
+- clean doc
+- fix broken examples/
+
 ## v1.0.0 (2023.11.10)
 
 - adapt to pydantic v2.

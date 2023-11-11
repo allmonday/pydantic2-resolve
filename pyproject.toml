@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydantic2-resolve"
-version = "1.0.0"
+version = "1.0.1"
 description = "create nested data structure easily"
 authors = ["tangkikodo <allmonday@126.com>"]
 readme = "README.md"

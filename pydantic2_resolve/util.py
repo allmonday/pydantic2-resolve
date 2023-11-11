@@ -217,6 +217,20 @@ def update_dataclass_forward_refs(kls):
                 update_dataclass_forward_refs(t)
 
 
+class TypeAdapterManager:
+    apapters = {}
+    
+    @classmethod
+    def get(cls, type):
+        adapter = cls.apapters.get(type)
+        if adapter:
+            return adapter
+        else:
+            new_adapter = TypeAdapter(type)
+            cls.apapters[type] = new_adapter
+            return new_adapter
+
+
 def try_parse_data_to_target_field_type(target, field_name, data):
     """
     parse to pydantic or dataclass object
@@ -240,8 +254,9 @@ def try_parse_data_to_target_field_type(target, field_name, data):
     # 2. parse
     if field_type:
         try:
-            # result = parse_obj_as(field_type, data)
-            result = TypeAdapter(field_type).validate_python(data)
+            # https://docs.pydantic.dev/latest/concepts/performance/#typeadapter-instantiated-once
+            adapter = TypeAdapterManager.get(field_type)
+            result = adapter.validate_python(data)  
             return result
         except ValidationError as e:
             print(f'Warning: type mismatch, pls check the return type for "{field_name}", expected: {field_type}')

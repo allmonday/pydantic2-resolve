@@ -27,7 +27,7 @@ async def contact_batch_load_fn(names):
 
 # define schemas
 class Contact(BaseModel):
-    number: Optional[int]
+    number: Optional[int] = None
     
 
 class Friend(BaseModel):
