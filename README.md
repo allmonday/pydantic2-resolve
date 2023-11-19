@@ -10,6 +10,20 @@
 
 > NOTICE: this package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead.
 
+
+## TL;DR: 
+
+FastAPI example
+
+```shell
+poetry shell
+poetry install
+cd examples
+uvicorn fastapi_demo.main:app
+visit http://localhost:8000/docs#/default/get_tasks_tasks_get
+```
+
+
 ## Introduction
 
 Building related data has always been a troublesome thing, whether through ORM or manually constructing it, especially when you need to build data that combines data from multiple kind of sources.
@@ -452,14 +466,6 @@ python -m readme_demo.7_single
 
   reference: [test_2_ensure_subset.py](tests/utils/test_2_ensure_subset.py)
 
-## Run FastAPI example
-
-```shell
-poetry shell
-cd examples
-uvicorn fastapi_demo.main:app
-visit http://localhost:8000/docs#/default/get_tasks_tasks_get
-```
 
 ## Unittest
 
