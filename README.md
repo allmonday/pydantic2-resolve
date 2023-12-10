@@ -8,7 +8,13 @@
 
 [Change Log](./changelog.md)
 
-> NOTICE: this package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead.
+> A small yet powerful tool to extend your pydantic schema with no pain.
+>
+> It is the key to the realm of composable development pattern
+>
+> [Attention] This package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead.
+
+What is composable pattarn? https://github.com/allmonday/composable-development-pattern
 
 
 ## TL;DR: 
