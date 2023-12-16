@@ -112,5 +112,6 @@ async def test_error():
     _departments = [Department(**d) for d in departments if d['id'] in department_ids] 
     result = Result(departments=_departments)
     with pytest.raises(ValidationError):
-        await Resolver(annotation_class=Result).resolve(result)
+        # await Resolver(annotation_class=Result).resolve(result)
+        await Resolver().resolve(result)  # auto resolve
 

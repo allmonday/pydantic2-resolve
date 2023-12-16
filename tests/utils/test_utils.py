@@ -118,7 +118,7 @@ def test_auto_mapper_1():
         a: int
     
     params = (A, {'a': 1})
-    ret = util.get_mapping_rule(*params)(*params)  # type:ignore
+    ret = util._get_mapping_rule(*params)(*params)  # type:ignore
     assert ret == A(a=1)
     
     @dataclass
@@ -126,7 +126,7 @@ def test_auto_mapper_1():
         a: int
 
     params2 = (B, {'a': 1})
-    ret2 = util.get_mapping_rule(*params2)(*params2) # type:ignore
+    ret2 = util._get_mapping_rule(*params2)(*params2) # type:ignore
     assert ret2 == B(a=1)
 
 
@@ -140,12 +140,12 @@ def test_auto_mapper_2():
             self.a = a
     
     p1 = (A, AA(1))
-    ret = util.get_mapping_rule(*p1)(*p1)  # type: ignore
+    ret = util._get_mapping_rule(*p1)(*p1)  # type: ignore
     assert ret == A(a=1)
 
     p2 = (A, {'a': 1})
     with pytest.raises(AttributeError):
-        util.get_mapping_rule(*p2)  # type: ignore
+        util._get_mapping_rule(*p2)  # type: ignore
     
 
 def test_auto_mapper_3():
@@ -154,10 +154,10 @@ def test_auto_mapper_3():
         model_config = ConfigDict(from_attributes=True)
     
     p1 = (A, A(a=1))
-    rule = util.get_mapping_rule(*p1)  # type: ignore
+    rule = util._get_mapping_rule(*p1)  # type: ignore
 
     assert rule is None
-    output = util.apply_rule(rule, *p1, is_list=False)
+    output = util._apply_rule(rule, *p1, is_list=False)
     assert output == A(a=1)
 
 
@@ -171,5 +171,5 @@ def test_auto_mapper_4():
     
     p1 = (A, AA(a=1))
     with pytest.raises(AttributeError):
-        util.get_mapping_rule(*p1)(*p1)  # type: ignore
+        util._get_mapping_rule(*p1)(*p1)  # type: ignore
 

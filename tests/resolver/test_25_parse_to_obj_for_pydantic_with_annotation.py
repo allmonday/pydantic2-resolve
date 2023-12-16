@@ -36,6 +36,6 @@ class Book(BaseModel):
 @pytest.mark.asyncio
 async def test_1():
     classroom = ClassRoom()
-    classroom = await Resolver(annotation_class=ClassRoom).resolve(classroom)
+    classroom = await Resolver().resolve(classroom)  # annotation is not required any more.
     assert isinstance(classroom.students[0].books[0], Book)
 
