@@ -2,6 +2,10 @@
 
 # pydantic2-resolve
 
+## v.1.1.1 (2023.12.20)
+
+- fix corner case of empty list input. `tests/core/test_input.py`
+
 ## v.1.1.0 (2023.12.16)
 
 > v1.8.0 + v1.8.1 of pydantic-resolve
@@ -10,7 +14,6 @@
 - remove Resolver.annotation_class, it will be processed automatically
 - new helper function `copy_dataloader_kls` to generate a copy of DataLoader
 - `pydantic_resolve.utils` provide several internal `generate_loader` functions.
-
 
 ## v1.0.1 (2023.11.11)
 
