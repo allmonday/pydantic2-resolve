@@ -8,6 +8,8 @@
 
 [Change Log](./changelog.md)
 
+[discord](https://discord.com/channels/1197929379951558797/1197929379951558800)
+
 > A small yet powerful tool to extend your pydantic schema with no pain.
 >
 > It is the key to the realm of composable development pattern
