@@ -10,7 +10,7 @@
 
 > A small yet powerful tool to extend your pydantic schema with no pain.
 >
-> It is the key to the realm of composable development pattern
+> It is the key to the realm of composition-oriented-development-pattern (wip)
 >
 > [Attention] This package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead.
 
