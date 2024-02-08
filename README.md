@@ -221,7 +221,7 @@ python -m readme_demo.7_single
 - default_required: if True, fields with default values will also in schema['required']
 - use with `Field(exclude=True)` to hide fields in schema and dumped result
 
-  reference: [test_schema_config.py](tests/utils/test_schema_config.py)
+  reference: [test_schema_config.py](tests/utils/test_model_config.py)
 
 ## Run FastAPI example:
 
