@@ -7,6 +7,7 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 from inspect import iscoroutine, isfunction
 from typing import Any, DefaultDict, Sequence, Type, TypeVar, List, Callable, Optional, Mapping, Union, Iterator, Dict, get_type_hints
 import pydantic2_resolve.constant as const
+from pydantic2_resolve.exceptions import GlobalLoaderFieldOverlappedError
 from aiodataloader import DataLoader
 
 
@@ -17,6 +18,13 @@ def get_class_field_annotations(cls: Type):
 
 T = TypeVar("T")
 V = TypeVar("V")
+
+def merge_dicts(a: Dict[str, Any], b: Dict[str, Any]):
+    overlap = set(a.keys()) & set(b.keys())
+    if overlap:
+        raise GlobalLoaderFieldOverlappedError(f'loader_filters and global_loader_filter have duplicated key(s): {",".join(overlap)}')
+    else:
+        return {**a, **b}
 
 def build_object(items: Sequence[T], keys: List[V], get_pk: Callable[[T], V]) -> Iterator[Optional[T]]:
     """
@@ -48,6 +56,9 @@ def replace_method(cls: Type, cls_name: str, func_name: str, func: Callable):
 
 
 def get_required_fields(kls: BaseModel):
+    """
+    return required fields and fields that has resolve/post methods
+    """
     required_fields = []
 
     # 1. get required fields
@@ -88,6 +99,44 @@ def output(kls):
         raise AttributeError(f'target class {kls.__name__} is not BaseModel')
     return kls
 
+def model_config(default_required: bool=True):
+    """
+    in pydantic v2, we can not use __exclude_field__ to set hidden field in model_config hidden_field params
+    model_config now is just a simple decorator to remove fields (with exclude=True) from schema.properties
+    and set schema.required for better schema description. 
+    (same like `output` decorator, you can replace output with model_config)
+
+    it keeps the form of model_config(params) in order to extend new features in future
+    """
+    def wrapper(kls):
+        if issubclass(kls, BaseModel):
+            def build():
+                def _schema_extra(schema: Dict[str, Any], model) -> None:
+                    # 1. collect exclude fields and then hide in both schema and dump (default action)
+                    excluded_fields = [k for k, v in kls.model_fields.items() if v.exclude == True]
+                    props = {}
+
+                    # config schema properties
+                    for k, v in schema.get('properties', {}).items():
+                        if k not in excluded_fields:
+                            props[k] = v
+                    schema['properties'] = props
+
+                    # config schema required (fields with default values will not be listed in required field)
+                    # and the generated typescript models will define it as optional, and is troublesome in use
+                    if default_required:
+                        fnames = get_required_fields(model)
+                        if excluded_fields:
+                            fnames = [n for n in fnames if n not in excluded_fields]
+                        schema['required'] = fnames
+
+                return _schema_extra
+
+            kls.model_config['json_schema_extra'] = staticmethod(build())
+        else:
+            raise AttributeError(f'target class {kls.__name__} is not BaseModel')
+        return kls
+    return wrapper
 
 def mapper(func_or_class: Union[Callable, Type]):
     """

@@ -2,6 +2,11 @@
 
 # pydantic2-resolve
 
+## v.1.1.2 (2024.02.08)
+
+- add `global_loader_filter` for convinence. (thanks Dambre)
+- add `model_config` for better schema definition (same as output) and hide fields.
+
 ## v.1.1.1 (2023.12.20)
 
 - fix corner case of empty list input. `tests/core/test_input.py`
