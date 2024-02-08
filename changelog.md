@@ -2,7 +2,10 @@
 
 # pydantic2-resolve
 
-## v.1.1.2 (2024.02.08)
+## v.1.1.3 (2024.02.08)
+- add `model_config` into  `__all__`
+
+## v.1.1.2 (2024.02.08) yanked
 
 - add `global_loader_filter` for convinence. (thanks Dambre)
 - add `model_config` for better schema definition (same as output) and hide fields.
