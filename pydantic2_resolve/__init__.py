@@ -4,7 +4,7 @@ from .exceptions import (
     LoaderFieldNotProvidedError,
     MissingAnnotationError)
 from .resolver import Resolver, LoaderDepend
-from .util import build_list, build_object, mapper, ensure_subset, output, copy_dataloader_kls
+from .util import build_list, build_object, mapper, ensure_subset, output, copy_dataloader_kls, model_config
 
 __all__ = [
     'Resolver',
@@ -18,5 +18,6 @@ __all__ = [
     'mapper',
     'ensure_subset',
     'output',
+    'model_config',
     'copy_dataloader_kls'
 ]
