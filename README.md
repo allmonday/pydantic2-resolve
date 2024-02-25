@@ -16,10 +16,13 @@
 
 What is composable pattarn? https://github.com/allmonday/composable-development-pattern
 
+4 steps from root data to view data
+![](./doc/concept.png)
+
 ## Install
 
 ```shell
-pip install pydantic-resolve
+pip install pydantic2-resolve
 ```
 
 ## Code snippets
@@ -29,7 +32,7 @@ pip install pydantic-resolve
 ```python
 import asyncio
 from pydantic import BaseModel
-from pydantic_resolve import Resolver
+from pydantic2_resolve import Resolver
 
 async def query_age(name):
     print(f'query {name}')
@@ -77,7 +80,7 @@ asyncio.run(simple())
 import asyncio
 from typing import List
 from pydantic import BaseModel
-from pydantic_resolve import Resolver, LoaderDepend as LD
+from pydantic2_resolve import Resolver, LoaderDepend as LD
 
 async def batch_person_age_loader(names: List[str]):
     print(names)
