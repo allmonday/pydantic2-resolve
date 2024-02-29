@@ -2,7 +2,7 @@ from collections import namedtuple
 from typing import List
 import pytest
 from pydantic import ConfigDict, BaseModel, ValidationError
-from pydantic2_resolve import Resolver, LoaderDepend, mapper
+from pydantic_resolve import Resolver, LoaderDepend, mapper
 
 @pytest.mark.asyncio
 async def test_1():

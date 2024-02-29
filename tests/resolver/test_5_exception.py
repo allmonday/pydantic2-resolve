@@ -1,5 +1,5 @@
 from __future__ import annotations
-from pydantic2_resolve import ResolverTargetAttrNotFound, Resolver
+from pydantic_resolve import ResolverTargetAttrNotFound, Resolver
 from pydantic import ConfigDict, BaseModel, ValidationError
 import pytest
 

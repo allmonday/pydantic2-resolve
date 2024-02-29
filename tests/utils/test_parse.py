@@ -1,4 +1,4 @@
-from pydantic2_resolve import util
+from pydantic_resolve import util
 from typing import Optional
 from pydantic import ConfigDict, BaseModel, ValidationError
 import pytest

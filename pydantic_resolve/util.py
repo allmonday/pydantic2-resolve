@@ -6,8 +6,8 @@ from dataclasses import is_dataclass
 from pydantic import BaseModel, TypeAdapter, ValidationError
 from inspect import iscoroutine, isfunction
 from typing import Any, DefaultDict, Sequence, Type, TypeVar, List, Callable, Optional, Mapping, Union, Iterator, Dict, get_type_hints
-import pydantic2_resolve.constant as const
-from pydantic2_resolve.exceptions import GlobalLoaderFieldOverlappedError
+import pydantic_resolve.constant as const
+from pydantic_resolve.exceptions import GlobalLoaderFieldOverlappedError
 from aiodataloader import DataLoader
 
 

@@ -1,7 +1,7 @@
 import pytest
 from typing import List, Optional
 from pydantic import BaseModel
-from pydantic2_resolve.resolver import Resolver
+from pydantic_resolve.resolver import Resolver
 
 
 class Kar(BaseModel):

@@ -2,6 +2,10 @@
 
 # pydantic2-resolve
 
+## v.2.0.0 (2024.02.29)
+- rename pydantic2_resolve -> pydantic_resolve to align with pydantic-resolve (v1)
+- add more diagrams in readme.
+
 ## v.1.1.3 (2024.02.08)
 - add `model_config` into  `__all__`
 

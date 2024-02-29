@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from typing import List
-from pydantic2_resolve import Resolver, LoaderDepend
+from pydantic_resolve import Resolver, LoaderDepend
 from aiodataloader import DataLoader
 import pytest
-from pydantic2_resolve.exceptions import GlobalLoaderFieldOverlappedError
+from pydantic_resolve.exceptions import GlobalLoaderFieldOverlappedError
 
 class LoaderA(DataLoader):
     power: int

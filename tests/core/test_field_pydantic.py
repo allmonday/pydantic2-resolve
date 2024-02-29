@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Optional, List
 from pydantic import BaseModel
-from pydantic2_resolve.core import scan_and_store_required_fields
+from pydantic_resolve.core import scan_and_store_required_fields
 
 class Student(BaseModel):
     name: str = ''

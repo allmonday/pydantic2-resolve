@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "pydantic2-resolve"
-version = "1.1.3"
+version = "2.0.0"
 description = "create nested data structure easily"
 authors = ["tangkikodo <allmonday@126.com>"]
 readme = "README.md"
 repository = "https://github.com/allmonday/pydantic2_resolve"
 keywords = ["pydantic2", "fastapi"]
 license = "MIT"
-packages = [{include = "pydantic2_resolve"}]
+packages = [{include = "pydantic_resolve"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"

@@ -1,6 +1,6 @@
-from pydantic2_resolve.util import model_config
+from pydantic_resolve.util import model_config
 from pydantic import BaseModel, Field
-from pydantic2_resolve import Resolver
+from pydantic_resolve import Resolver
 import pytest
 
 @pytest.mark.asyncio

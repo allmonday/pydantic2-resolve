@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 import pytest
 from pydantic import ConfigDict, BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend, mapper
+from pydantic_resolve import Resolver, LoaderDepend, mapper
 from aiodataloader import DataLoader
 
 @pytest.mark.asyncio

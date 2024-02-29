@@ -6,18 +6,13 @@
 
 ![img](doc/resolver.png)
 
-[Change Log](./changelog.md)
 
-> A small yet powerful tool to extend your pydantic schema with no pain.
->
-> It is the key to the realm of composition-oriented-development-pattern (wip)
->
-> [Attention] This package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead.
+A hierarchical solution for data fetching and processing
 
-What is composable pattarn? https://github.com/allmonday/composable-development-pattern
+> It is the key to composition-oriented-development-pattern (wip)
+> https://github.com/allmonday/composition-oriented-development-pattern
 
-4 steps from root data to view data
-![](./doc/concept.png)
+> [Attention] This package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead. they share the same set of API.
 
 ## Install
 
@@ -25,14 +20,35 @@ What is composable pattarn? https://github.com/allmonday/composable-development-
 pip install pydantic2-resolve
 ```
 
-## Code snippets
+[Change Log](./changelog.md)
 
-1. basic usage, resolve your fields.
+## Concept
+
+It taks 5 steps to convert from root data into view data.
+
+1. define schema of root data and descdants & load root data
+2. forward-resolve all descdants data
+3. backward-process the data
+4. tree shake the data marked as exclude=True
+5. get the output
+
+![](./doc/concept.png)
+
+How resolve works, level by level:
+
+![](./doc/forward.png)
+
+
+## Quick start
+
+1. Basic usage, resolve your fields.
+
+> `N+1` query will happens in list
 
 ```python
 import asyncio
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver
+from pydantic_resolve import Resolver
 
 async def query_age(name):
     print(f'query {name}')
@@ -66,9 +82,10 @@ async def simple():
     people = await Resolver().resolve(people)
     print(people)
     # Oops!! the issue of N+1 query happens
-    # query kikodo
-    # query John
-    # query 老王
+    #
+    # query kikodo  
+    # query John    
+    # query 老王     
     # [Person(name='kikodo', age=21, is_adult=True), Person(name='John', age=14, is_adult=False), Person(name='老王', age=40, is_adult=True)]
 
 asyncio.run(simple())
@@ -80,7 +97,7 @@ asyncio.run(simple())
 import asyncio
 from typing import List
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend as LD
+from pydantic_resolve import Resolver, LoaderDepend as LD
 
 async def batch_person_age_loader(names: List[str]):
     print(names)
@@ -107,21 +124,16 @@ async def simple():
     people = await Resolver().resolve(people)
     print(people)
 
-    # query query kikodo,John,老王 (N+1 query fixed)
+    # query kikodo,John,老王 (N+1 query fixed)
+    #
     # [Person(name='kikodo', age=21, is_adult=True), Person(name='John', age=14, is_adult=False), Person(name='老王', age=40, is_adult=True)]
 
 asyncio.run(simple())
 ```
 
-## More cases:
+## Simple demo:
 
-for more cases like:
-
-- how to filter members
-- how to make post calculation after resolved?
-- and so on..
-
-please read the following demos.
+[Introduction](./examples/readme_demo/readme.md)
 
 ```shell
 cd examples
@@ -135,6 +147,11 @@ python -m readme_demo.5_subset
 python -m readme_demo.6_mapper
 python -m readme_demo.7_single
 ```
+
+## Advanced demo:
+
+https://github.com/allmonday/composition-oriented-development-pattern
+
 
 ## API
 

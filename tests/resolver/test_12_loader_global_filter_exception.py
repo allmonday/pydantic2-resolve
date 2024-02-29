@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List
 import pytest
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend, LoaderFieldNotProvidedError
+from pydantic_resolve import Resolver, LoaderDepend, LoaderFieldNotProvidedError
 from aiodataloader import DataLoader
 
 @pytest.mark.asyncio

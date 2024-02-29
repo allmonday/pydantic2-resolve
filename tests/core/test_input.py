@@ -1,4 +1,4 @@
-from pydantic2_resolve import Resolver
+from pydantic_resolve import Resolver
 import pytest
 
 @pytest.mark.asyncio
