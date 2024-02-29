@@ -3,7 +3,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field, asdict
 from typing import List
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend, mapper
+from pydantic_resolve import Resolver, LoaderDepend, mapper
 from aiodataloader import DataLoader
 import pytest
 

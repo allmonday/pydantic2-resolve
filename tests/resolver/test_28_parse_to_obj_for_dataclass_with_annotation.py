@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import List, Optional
 import pytest
 from dataclasses import dataclass, field
-from pydantic2_resolve import Resolver, LoaderDepend
+from pydantic_resolve import Resolver, LoaderDepend
 
 BOOKS = {
     1: [{'name': 'book1'}, {'name': 'book2'}],
@@ -44,7 +44,6 @@ async def test_loader_depends_1():
 
     students = [Student(id=1, name="jack"), Student(id=2, name="mike"), Student(id=3, name="wiki")]
     classroom = ClassRoom(students=students)
-    # res = await Resolver(annotation_class=ClassRoom).resolve(classroom)
     res = await Resolver().resolve(classroom)  # auto resolve
     assert isinstance(res.students[0].books[0], Book)
     assert isinstance(res.info, Info)

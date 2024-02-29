@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from pydantic2_resolve import Resolver, LoaderDepend
+from pydantic_resolve import Resolver, LoaderDepend
 
 @pytest.mark.asyncio
 async def test_sqlite_and_dataloader():

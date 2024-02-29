@@ -2,7 +2,7 @@ import json
 import asyncio
 from typing import List
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend, build_list
+from pydantic_resolve import Resolver, LoaderDepend, build_list
 from readme_demo.datum import datum, DepartmentBase, TeamBase, MemberBase
 from aiodataloader import DataLoader
 

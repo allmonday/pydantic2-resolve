@@ -1,7 +1,7 @@
 from typing import List
 import pytest
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend
+from pydantic_resolve import Resolver, LoaderDepend
 from aiodataloader import DataLoader
 
 # for testing, loder instance need to initialized inside a thread with eventloop

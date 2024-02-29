@@ -1,7 +1,7 @@
 import asyncio
 from random import random
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver
+from pydantic_resolve import Resolver
 from typing import List
 import json
 

@@ -6,12 +6,12 @@ from inspect import iscoroutine
 from typing import TypeVar, Dict
 from .exceptions import ResolverTargetAttrNotFound, LoaderFieldNotProvidedError, MissingAnnotationError
 from typing import Any, Callable, Optional
-from pydantic2_resolve import core
+from pydantic_resolve import core
 from aiodataloader import DataLoader
 from inspect import isclass
 from types import MappingProxyType
-import pydantic2_resolve.constant as const
-import pydantic2_resolve.util as util
+import pydantic_resolve.constant as const
+import pydantic_resolve.util as util
 
 
 def LoaderDepend(  # noqa: N802

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List
 import asyncio
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver
+from pydantic_resolve import Resolver
 import pytest
 
 class Student(BaseModel):

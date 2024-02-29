@@ -3,7 +3,7 @@ import json
 import asyncio
 from typing import List
 from pydantic import BaseModel
-from pydantic2_resolve import Resolver, LoaderDepend, build_list, ensure_subset
+from pydantic_resolve import Resolver, LoaderDepend, build_list, ensure_subset
 from readme_demo.datum import datum, DepartmentBase, TeamBase, MemberBase
 
 
@@ -45,7 +45,7 @@ async def main():
     2. use ensure_subset to pick the necessary fields
     """
     result = Result()
-    data = await Resolver(annotation_class=Result).resolve(result)
+    data = await Resolver().resolve(result)
     print(json.dumps(data.dict(), indent=2))
 
 asyncio.run(main())

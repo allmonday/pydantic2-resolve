@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic import BaseModel, ValidationError
-from pydantic2_resolve import build_object, LoaderDepend, Resolver, build_list
+from pydantic_resolve import build_object, LoaderDepend, Resolver, build_list
 from typing import List, Optional
 import pytest
 
@@ -112,6 +112,5 @@ async def test_error():
     _departments = [Department(**d) for d in departments if d['id'] in department_ids] 
     result = Result(departments=_departments)
     with pytest.raises(ValidationError):
-        # await Resolver(annotation_class=Result).resolve(result)
         await Resolver().resolve(result)  # auto resolve
 

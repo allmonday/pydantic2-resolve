@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, List
-from pydantic2_resolve.core import scan_and_store_required_fields
+from pydantic_resolve.core import scan_and_store_required_fields
 
 @dataclass
 class Student:

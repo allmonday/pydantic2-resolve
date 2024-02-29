@@ -2,7 +2,7 @@ from aiodataloader import DataLoader
 import fastapi_demo.model as sm
 import fastapi_demo.db as db
 from sqlalchemy import select
-from pydantic2_resolve.util import build_list
+from pydantic_resolve.util import build_list
 
 class FeedbackLoader(DataLoader):
     private: bool
