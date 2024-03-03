@@ -24,9 +24,17 @@ class Blog(BaseModel):
     comments: list[Comment] = []
     async def resolve_comments(self):
         return await query_comments(self.id)
+    
+    comment_count: int = 0
+    def post_comment_count(self):
+        return len(self.comments)
 
 class MyBlogSite(BaseModel):
     blogs: list[Blog]
+
+    comment_count: int = 0
+    def post_comment_count(self):
+        return sum([b.comment_count for b in self.blogs])
 
 
 async def single():

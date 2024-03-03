@@ -25,9 +25,17 @@ class Blog(BaseModel):
     comments: list[Comment] = []
     def resolve_comments(self, loader=LoaderDepend(blog_to_comments_loader)):
         return loader.load(self.id)
+    
+    comment_count: int = 0
+    def post_comment_count(self):
+        return len(self.comments)
 
 class MyBlogSite(BaseModel):
     blogs: list[Blog]
+
+    comment_count: int = 0
+    def post_comment_count(self):
+        return sum([b.comment_count for b in self.blogs])
 
 async def batch():
     my_blog_site = MyBlogSite(

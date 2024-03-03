@@ -76,10 +76,18 @@ class Blog(BaseModel):
     comments: list[Comment] = []
     async def resolve_comments(self):
         return await query_comments(self.id)
+    
+    comment_count: int = 0
+    def post_comment_count(self):
+        return len(self.comments)
 
 class MyBlogSite(BaseModel):
     blogs: list[Blog]
     name: str
+
+    comment_count: int = 0
+    def post_comment_count(self):
+        return sum([b.comment_count for b in self.blogs])
 
 async def single():
     blog = Blog(id=1, title='what is pydantic-resolve')
@@ -128,7 +136,8 @@ output of my_blog_site:
                     "id": 2,
                     "content": "i dont understand"
                 }
-            ]
+            ],
+            "comment_count": 2
         },
         {
             "id": 2,
@@ -142,9 +151,11 @@ output of my_blog_site:
                     "id": 4,
                     "content": "wow!"
                 }
-            ]
+            ],
+            "comment_count": 2
         }
-    ]
+    ],
+    "comment_count": 4
 }
 ```
 
@@ -183,9 +194,17 @@ class Blog(BaseModel):
     comments: list[Comment] = []
     def resolve_comments(self, loader=LoaderDepend(blog_to_comments_loader)):
         return loader.load(self.id)
+    
+    comment_count: int = 0
+    def post_comment_count(self):
+        return len(self.comments)
 
 class MyBlogSite(BaseModel):
     blogs: list[Blog]
+
+    comment_count: int = 0
+    def post_comment_count(self):
+        return sum([b.comment_count for b in self.blogs])
 
 async def batch():
     my_blog_site = MyBlogSite(
