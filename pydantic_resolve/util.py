@@ -19,10 +19,16 @@ def get_class_field_annotations(cls: Type):
 T = TypeVar("T")
 V = TypeVar("V")
 
+def safe_issubclass(kls, classinfo):
+    try:
+        return issubclass(kls, classinfo)
+    except TypeError:
+        return False
+
 def merge_dicts(a: Dict[str, Any], b: Dict[str, Any]):
     overlap = set(a.keys()) & set(b.keys())
     if overlap:
-        raise GlobalLoaderFieldOverlappedError(f'loader_filters and global_loader_filter have duplicated key(s): {",".join(overlap)}')
+        raise GlobalLoaderFieldOverlappedError(f'loader_params and global_loader_param have duplicated key(s): {",".join(overlap)}')
     else:
         return {**a, **b}
 
@@ -68,9 +74,9 @@ def get_required_fields(kls: BaseModel):
 
     # 2. get resolve_ and post_ target fields
     for f in dir(kls):
-        if f.startswith(const.PREFIX):
+        if f.startswith(const.RESOLVE_PREFIX):
             if isfunction(getattr(kls, f)):
-                required_fields.append(f.replace(const.PREFIX, ''))
+                required_fields.append(f.replace(const.RESOLVE_PREFIX, ''))
 
         if f.startswith(const.POST_PREFIX):
             if isfunction(getattr(kls, f)):
@@ -85,7 +91,7 @@ def output(kls):
     make typescript code gen result friendly to use
     """
 
-    if issubclass(kls, BaseModel):
+    if safe_issubclass(kls, BaseModel):
 
         def build():
             def schema_extra(schema: Dict[str, Any], model) -> None:
@@ -109,7 +115,7 @@ def model_config(default_required: bool=True):
     it keeps the form of model_config(params) in order to extend new features in future
     """
     def wrapper(kls):
-        if issubclass(kls, BaseModel):
+        if safe_issubclass(kls, BaseModel):
             def build():
                 def _schema_extra(schema: Dict[str, Any], model) -> None:
                     # 1. collect exclude fields and then hide in both schema and dump (default action)
@@ -186,7 +192,7 @@ def _get_mapping_rule(target, source) -> Optional[Callable]:
         return None
 
     # pydantic
-    if issubclass(target, BaseModel):
+    if safe_issubclass(target, BaseModel):
         if target.model_config.get('from_attributes'):
             if isinstance(source, dict):
                 raise AttributeError(f"{type(source)} -> {target.__name__}: pydantic from_orm can't handle dict object")
@@ -229,8 +235,8 @@ def ensure_subset(base):
     subset of target class
     """
     def wrap(kls):
-        assert issubclass(base, BaseModel), 'base should be pydantic class'
-        assert issubclass(kls, BaseModel), 'class should be pydantic class'
+        assert safe_issubclass(base, BaseModel), 'base should be pydantic class'
+        assert safe_issubclass(kls, BaseModel), 'class should be pydantic class'
 
         @functools.wraps(kls)
         def inner():
@@ -270,7 +276,7 @@ def update_forward_refs(kls):
                 shelled_type = shelling_type(v)
                 update_forward_refs(shelled_type)
 
-    if issubclass(kls, BaseModel):
+    if safe_issubclass(kls, BaseModel):
         update_pydantic_forward_refs(kls)
 
     if is_dataclass(kls):

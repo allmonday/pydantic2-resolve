@@ -4,256 +4,104 @@
 [![CI](https://github.com/allmonday/pydantic2-resolve/actions/workflows/ci.yml/badge.svg)](https://github.com/allmonday/pydantic2-resolve/actions/workflows/ci.yml)
 ![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/372580ad111c92340dac39987c0c4e9a/raw/covbadge.json)
 
-![img](doc/resolver.png)
+Pydantic-resolve is a schema based, hierarchical solution for fetching and crafting data.
+
+It combines the advantages of restful and graphql.
 
 
-A hierarchical solution for data fetching and processing
+![img](doc/intro.jpeg)
 
-> It is the key to composition-oriented-development-pattern (wip)
-> https://github.com/allmonday/composition-oriented-development-pattern
 
-> [Attention] This package supports pydantic v2 only, it's incompatible with pydantic v1, if you want to play with pydantic v1, please use pydantic-resolve instead. they share the same set of API.
+Advantages:
+1. use declaretive way to define view data, easy to maintain and develop
+2. enhance the traditional restful response, to support gql-like style data structure.
+3. provide post_method and other tools to craft resolved data.
+
+
+[Discord](https://discord.com/channels/1197929379951558797/1197929379951558800)
 
 ## Install
 
-```shell
-pip install pydantic2-resolve
-```
+> If you are using pydantic v1, please use [pydantic-resolve](https://github.com/allmonday/pydantic-resolve) instead.
 
-[Change Log](./changelog.md)
-
-## Concept
-
-It taks 5 steps to convert from root data into view data.
-
-1. define schema of root data and descdants & load root data
-2. forward-resolve all descdants data
-3. backward-process the data
-4. tree shake the data marked as exclude=True
-5. get the output
-
-![](./doc/concept.png)
-
-How resolve works, level by level:
-
-![](./doc/forward.png)
-
-
-## Quick start
-
-1. Basic usage, resolve your fields.
-
-> `N+1` query will happens in list
-
-```python
-import asyncio
-from pydantic import BaseModel
-from pydantic_resolve import Resolver
-
-async def query_age(name):
-    print(f'query {name}')
-    await asyncio.sleep(1)
-    _map = {
-        'kikodo': 21,
-        'John': 14,
-        '老王': 40,
-    }
-    return _map.get(name)
-
-class Person(BaseModel):
-    name: str
-
-    age: int = 0
-    async def resolve_age(self):
-        return await query_age(self.name)
-
-    is_adult: bool = False
-    def post_is_adult(self):
-        return self.age > 18
-
-async def simple():
-    p = Person(name='kikodo')
-    p = await Resolver().resolve(p)
-    print(p)
-    # query kikodo
-    # Person(name='kikodo', age=21, is_adult=True)
-
-    people = [Person(name=n) for n in ['kikodo', 'John', '老王']]
-    people = await Resolver().resolve(people)
-    print(people)
-    # Oops!! the issue of N+1 query happens
-    #
-    # query kikodo  
-    # query John    
-    # query 老王     
-    # [Person(name='kikodo', age=21, is_adult=True), Person(name='John', age=14, is_adult=False), Person(name='老王', age=40, is_adult=True)]
-
-asyncio.run(simple())
-```
-
-2. optimize `N+1` with dataloader
-
-```python
-import asyncio
-from typing import List
-from pydantic import BaseModel
-from pydantic_resolve import Resolver, LoaderDepend as LD
-
-async def batch_person_age_loader(names: List[str]):
-    print(names)
-    _map = {
-        'kikodo': 21,
-        'John': 14,
-        '老王': 40,
-    }
-    return [_map.get(n) for n in names]
-
-class Person(BaseModel):
-    name: str
-
-    age: int = 0
-    def resolve_age(self, loader=LD(batch_person_age_loader)):
-        return loader.load(self.name)
-
-    is_adult: bool = False
-    def post_is_adult(self):
-        return self.age > 18
-
-async def simple():
-    people = [Person(name=n) for n in ['kikodo', 'John', '老王']]
-    people = await Resolver().resolve(people)
-    print(people)
-
-    # query kikodo,John,老王 (N+1 query fixed)
-    #
-    # [Person(name='kikodo', age=21, is_adult=True), Person(name='John', age=14, is_adult=False), Person(name='老王', age=40, is_adult=True)]
-
-asyncio.run(simple())
-```
-
-## Simple demo:
-
-[Introduction](./examples/readme_demo/readme.md)
 
 ```shell
-cd examples
-
-python -m readme_demo.0_basic
-python -m readme_demo.1_filter
-python -m readme_demo.2_post_methods
-python -m readme_demo.3_context
-python -m readme_demo.4_loader_instance
-python -m readme_demo.5_subset
-python -m readme_demo.6_mapper
-python -m readme_demo.7_single
+pip install pydantic-resolve
 ```
 
-## Advanced demo:
+## Concepts from GraphQL to Pydantic-resolve
 
+```gql
+query {
+    MyBlogSite {
+        name
+        blogs {
+            id
+            title
+            comments {
+                id
+                content
+            }
+            # comment_count
+        }
+        # comment_count
+    }
+}
+```
+
+This is how we do queries in GraphQL, dive by describing schema and field names.
+
+Assuming `comment_count` is a extra field (length of comment), which is required and calculated by client after fetching the data.
+
+client side so need to iterate over the blogs to get the length and the sum, which is boring (things gets worse if the structure is deeper).
+
+In pydantic-resolve, we can handle comment_count at server side, by transforming the query into pydantic schemas and attach some resolve, post methods.
+
+
+```python
+import blog_service as bs
+import comment_service as cs
+
+class MySite(BaseModel):
+    blogs: list[MySiteBlog] = []
+    async def resolve_blogs(self):
+        return await bs.get_blogs()
+
+    comment_count: int = 0
+    def post_comment_count(self):
+        return sum([b.comment_count for b in self.blogs])
+
+# -------- inherit and extend ----------
+class MySiteBlog(bs.Blog):  
+    comments: list[cs.Comment] = []
+    def resolve_comments(self, loader=LoaderDepend(cs.blog_to_comments_loader)):
+        return loader.load(self.id)
+
+    comment_count: int = 0
+    def post_comment_count(self):
+        return len(self.comments)
+        
+async def main():
+    my_blog_site = MyBlogSite(name: "tangkikodo's blog")
+    my_blog_site = await Resolver().resolve(my_blog_site)
+```
+
+schemas , query functions and loader functions are provided by entity's service modules. 
+
+So that we can declare customrized schema by simpily **INHERIT** and **EXTEND** from base schemas.
+
+> This just sounds like columns of values (inherit) and of foreign keys (extend) in concept of relational database.
+
+After transforming GraphQL query into pydantic schemas, post calculation become dead easy, and no more iterations.
+
+> Collector is a powerful feature for adjusting data structures. https://allmonday.github.io/pydantic-resolve/reference_api/#collector
+
+## API Reference
+https://allmonday.github.io/pydantic-resolve/reference_api/
+
+## Composition oriented development-pattern (wip)
 https://github.com/allmonday/composition-oriented-development-pattern
 
-
-## API
-
-### Resolver(loader_filters, global_loader_filter, loader_instances, ensure_type, context)
-
-- loader_filters: `dict`
-
-  provide extra query filters along with loader key.
-
-  reference: [6_sqlalchemy_loaderdepend_global_filter.py](examples/6_sqlalchemy_loaderdepend_global_filter.py) L55, L59
-
-- global_loader_filter: `dict`
-
-  provide global filter config for all dataloader instances
-
-  it will raise exception if some fields are duplicated with specific loader filter config in `loader_filters`
-
-  reference: [test_33_global_loader_filter.py](tests/resolver/test_33_global_loader_filter.py) L47, L49
-
-- loader_instances: `dict`
-
-  provide pre-created loader instance, with can `prime` data into loader cache.
-
-  reference: [test_20_loader_instance.py](tests/resolver/test_20_loader_instance.py), L62, L63
-
-- ensure_type: `bool`
-
-  if `True`, resolve method is restricted to be annotated.
-
-  reference: [test_13_check_wrong_type.py](tests/resolver/test_13_check_wrong_type.py)
-
-- annotation_class: `class`
-
-  if you have `from __future__ import annotation`, and pydantic raises error, use this config to update forward refs
-
-  reference: [test_25_parse_to_obj_for_pydantic_with_annotation.py](tests/resolver/test_25_parse_to_obj_for_pydantic_with_annotation.py), L39
-
-- context: `dict`
-
-  context can carry setting into each single resolver methods.
-
-  ```python
-
-  class Earth(BaseModel):
-      humans: List[Human] = []
-      def resolve_humans(self, context):
-          return [dict(name=f'man-{i}') for i in range(context['count'])]
-
-  earth = await Resolver(context={'count': 10}).resolve(earth)
-  ```
-
-### LoaderDepend(loader_fn)
-
-- loader_fn: `subclass of DataLoader or batch_load_fn`. [detail](https://github.com/syrusakbary/aiodataloader#dataloaderbatch_load_fn-options)
-
-  declare dataloader dependency, `pydantic-resolve` will take the care of lifecycle of dataloader.
-
-### build_list(rows, keys, fn), build_object(rows, keys, fn)
-
-- rows: `list`, query result
-- keys: `list`, batch_load_fn:keys
-- fn: `lambda`, define the way to get primary key
-
-  helper function to generate return value required by `batch_load_fn`. read the code for details.
-
-  reference: [test_utils.py](tests/utils/test_utils.py), L32
-
-### mapper(param)
-
-- param: `class of pydantic or dataclass, or a lambda`
-
-  `pydantic-resolve` will trigger the fn in `mapper` after inner future is resolved. it exposes an interface to change return schema even from the same dataloader.
-  if param is a class, it will try to automatically transform it.
-
-  reference: [test_16_mapper.py](tests/resolver/test_16_mapper.py)
-
-### ensure_subset(base_class)
-
-- base_class: `class`
-
-  it will raise exception if fields of decorated class has field not existed in `base_class`.
-
-  reference: [test_2_ensure_subset.py](tests/utils/test_2_ensure_subset.py)
-
-### model_config(default_required: bool)
-
-- default_required: if True, fields with default values will also in schema['required']
-- use with `Field(exclude=True)` to hide fields in schema and dumped result
-
-  reference: [test_schema_config.py](tests/utils/test_model_config.py)
-
-## Run FastAPI example:
-
-FastAPI example
-
-```shell
-poetry shell
-poetry install
-cd examples
-uvicorn fastapi_demo.main:app
-visit http://localhost:8000/docs#/default/get_tasks_tasks_get
-```
 
 ## Unittest
 
