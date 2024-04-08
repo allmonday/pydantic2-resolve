@@ -20,6 +20,7 @@ Advantages:
 
 [Discord](https://discord.com/channels/1197929379951558797/1197929379951558800)
 
+
 ## Install
 
 > If you are using pydantic v1, please use [pydantic-resolve](https://github.com/allmonday/pydantic-resolve) instead.
@@ -47,7 +48,7 @@ query {
         # comment_count
     }
 }
-```
+
 
 This is how we do queries in GraphQL, dive by describing schema and field names.
 
