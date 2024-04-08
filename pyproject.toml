@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydantic2-resolve"
-version = "2.0.0"
+version = "2.1.0"
 description = "create nested data structure easily"
 authors = ["tangkikodo <allmonday@126.com>"]
 readme = "README.md"
@@ -28,3 +28,8 @@ uvicorn = "^0.22.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+]

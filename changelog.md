@@ -2,6 +2,10 @@
 
 # pydantic2-resolve
 
+## v.2.1.0 (2024.04.08)
+- bugfix: https://github.com/allmonday/pydantic2-resolve/issues/7
+- migrating collctor and internal optimization from pydantic-resolve
+
 ## v.2.0.0 (2024.02.29)
 - rename pydantic2_resolve -> pydantic_resolve to align with pydantic-resolve (v1)
 - add more diagrams in readme.
