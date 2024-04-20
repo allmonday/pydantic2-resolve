@@ -139,6 +139,7 @@ def test_resolve_params():
                     'trim_field': 'name',
                     'context': True,
                     'ancestor_context': True,
+                    'parent': False,
                     'dataloaders': [
                         {
                             'param': 'loader',
@@ -151,6 +152,7 @@ def test_resolve_params():
                     'trim_field': 'zeta',
                     'context': False,
                     'ancestor_context': False,
+                    'parent': False,
                     'dataloaders': [],
                 }
             },
