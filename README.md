@@ -48,7 +48,7 @@ query {
         # comment_count
     }
 }
-
+```
 
 This is how we do queries in GraphQL, dive by describing schema and field names.
 
