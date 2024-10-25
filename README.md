@@ -4,6 +4,15 @@
 [![CI](https://github.com/allmonday/pydantic2-resolve/actions/workflows/ci.yml/badge.svg)](https://github.com/allmonday/pydantic2-resolve/actions/workflows/ci.yml)
 ![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/allmonday/372580ad111c92340dac39987c0c4e9a/raw/covbadge.json)
 
+**This repo has been merged into pydantic-resolve and no more maintained**
+
+**This repo has been merged into pydantic-resolve and no more maintained**
+
+**This repo has been merged into pydantic-resolve and no more maintained**
+
+<hr>
+
+
 Pydantic-resolve is a schema based, hierarchical solution for fetching and crafting data.
 
 It combines the advantages of restful and graphql.
