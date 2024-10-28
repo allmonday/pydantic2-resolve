@@ -36,7 +36,7 @@ Advantages:
 
 
 ```shell
-pip install pydantic-resolve
+pip install pydantic2-resolve
 ```
 
 ## Concepts from GraphQL to Pydantic-resolve
